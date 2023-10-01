@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Three.js GLTFLoader Example</title>
+    <!-- Include Three.js library -->
+    <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Include GLTFLoader -->
+    <script type="module" src="https://unpkg.com/three@0.87.1/examples/js/loaders/GLTFLoader.js"></script>></script>
+</head>
+<body>
+    <script type="module">
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Load 3D model using GLTFLoader
+        const loader = new THREE.GLTFLoader();
+        const url = 'https://drive.google.com/drive/u/1/folders/14YmmBz9PfyZ3IfJHWGFBOpOUTpsD5xOR/city.glb'; // Replace with the actual URL of your GLTF model
+
+        loader.load(url, (gltf) => {
+            const model = gltf.scene;
+            scene.add(model);
+        }, undefined, (error) => {
+            console.error('Failed to load GLTF model:', error);
+        });
+
+        // Position the camera
+        camera.position.z = 5;
+
+        // Animation function
+        const animate = () => {
+            requestAnimationFrame(animate);
+
+            renderer.render(scene, camera);
+        };
+
+        // Start the animation loop
+        animate();
+    </script>
+</body>
+</html>
