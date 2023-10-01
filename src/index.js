@@ -31,7 +31,13 @@ scene.add(camera)
 const cameraPosition = new THREE.Vector3(0, 1, 2);
 const cameraSpeed = 0.1;
 
-const arrowKeys = { left: false, right: false, up: false, down: false };
+const mouse = new THREE.Vector2();
+const previousMouse = new THREE.Vector2();
+const cameraRotation = new THREE.Vector2(0, 0);
+const sensitivity = 0.02; // Adjust sensitivity to control rotation speed
+const cameraQuaternion = new THREE.Quaternion();
+
+const movementKeys = { a: false, s: false, w: false, d: false };
 
 document.addEventListener("mousemove", (event) => {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -39,17 +45,17 @@ document.addEventListener("mousemove", (event) => {
   });
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "ArrowLeft") arrowKeys.left = true;
-  if (event.key === "ArrowRight") arrowKeys.right = true;
-  if (event.key === "ArrowUp") arrowKeys.up = true;
-  if (event.key === "ArrowDown") arrowKeys.down = true;
+    if (event.key === "a") movementKeys.a = true;
+    if (event.key === "d") movementKeys.d = true;
+    if (event.key === "w") movementKeys.w = true;
+    if (event.key === "s") movementKeys.s = true;
 });
-
+  
 document.addEventListener("keyup", (event) => {
-  if (event.key === "ArrowLeft") arrowKeys.left = false;
-  if (event.key === "ArrowRight") arrowKeys.right = false;
-  if (event.key === "ArrowUp") arrowKeys.up = false;
-  if (event.key === "ArrowDown") arrowKeys.down = false;
+    if (event.key === "a") movementKeys.a = false;
+    if (event.key === "d") movementKeys.d = false;
+    if (event.key === "w") movementKeys.w = false;
+    if (event.key === "s") movementKeys.s = false;
 });
 
 const renderer = new THREE.WebGL1Renderer({
@@ -64,13 +70,29 @@ renderer.render(scene, camera)
 
 function animate() {
     requestAnimationFrame(animate);
-  
-    // Update camera position based on arrow key presses
-    if (arrowKeys.left) cameraPosition.x -= cameraSpeed;
-    if (arrowKeys.right) cameraPosition.x += cameraSpeed;
-    if (arrowKeys.up) cameraPosition.z -= cameraSpeed;
-    if (arrowKeys.down) cameraPosition.z += cameraSpeed;
-  
+
+    // Calculate the change in mouse position
+    const delta = new THREE.Vector2().subVectors(mouse, previousMouse);
+
+    // Update camera rotation based on horizontal mouse movement (around Y-axis)
+    cameraRotation.y -= delta.x * sensitivity;
+
+    // Set the camera's new rotation, allowing it to rotate continuously
+    camera.rotation.set(cameraRotation.x, cameraRotation.y, 0);
+
+    // Calculate the camera's quaternion
+    cameraQuaternion.setFromEuler(camera.rotation);
+
+    // Define movement vectors relative to the camera's orientation
+    const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(cameraQuaternion);
+    const right = new THREE.Vector3(1, 0, 0).applyQuaternion(cameraQuaternion);
+
+    // Update camera position based on ASWD key presses
+    if (movementKeys.a) cameraPosition.sub(right.clone().multiplyScalar(cameraSpeed));
+    if (movementKeys.d) cameraPosition.add(right.clone().multiplyScalar(cameraSpeed));
+    if (movementKeys.s) cameraPosition.sub(forward.clone().multiplyScalar(cameraSpeed));
+    if (movementKeys.w) cameraPosition.add(forward.clone().multiplyScalar(cameraSpeed));
+
     // Set the camera's new position
     camera.position.copy(cameraPosition);
   
