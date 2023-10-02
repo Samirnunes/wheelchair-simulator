@@ -70,32 +70,54 @@ renderer.render(scene, camera)
 
 function animate() {
     requestAnimationFrame(animate);
-
+  
     // Calculate the change in mouse position
     const delta = new THREE.Vector2().subVectors(mouse, previousMouse);
-
-    // Update camera rotation based on horizontal mouse movement (around Y-axis)
-    cameraRotation.y -= delta.x * sensitivity;
-
-    // Set the camera's new rotation, allowing it to rotate continuously
-    camera.rotation.set(cameraRotation.x, cameraRotation.y, 0);
-
-    // Calculate the camera's quaternion
-    cameraQuaternion.setFromEuler(camera.rotation);
-
+  
     // Define movement vectors relative to the camera's orientation
     const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(cameraQuaternion);
     const right = new THREE.Vector3(1, 0, 0).applyQuaternion(cameraQuaternion);
-
+  
+    // Store the camera's initial Y position
+    const initialY = camera.position.y;
+  
     // Update camera position based on ASWD key presses
     if (movementKeys.a) cameraPosition.sub(right.clone().multiplyScalar(cameraSpeed));
     if (movementKeys.d) cameraPosition.add(right.clone().multiplyScalar(cameraSpeed));
     if (movementKeys.s) cameraPosition.sub(forward.clone().multiplyScalar(cameraSpeed));
     if (movementKeys.w) cameraPosition.add(forward.clone().multiplyScalar(cameraSpeed));
+  
+    // Determine which axis to rotate based on the mouse movement
+    if (Math.abs(delta.x) > Math.abs(delta.y)) {
+        // Update camera rotation based on horizontal mouse movement (around Y-axis)
+        cameraRotation.y -= delta.x * sensitivity;
+    } else {
+        // Update camera rotation based on vertical mouse movement (around X-axis)
+        cameraRotation.x += delta.y * sensitivity;
 
+        // Limit vertical rotation to prevent camera flipping
+        cameraRotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, cameraRotation.x));
+    }
+
+    // Calculate the camera's quaternion
+    cameraQuaternion.setFromRotationMatrix(
+        new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(cameraRotation.x, cameraRotation.y, 0, 'YXZ'))
+    );
+    
     // Set the camera's new position
     camera.position.copy(cameraPosition);
   
+    // Restore the initial Y position
+    camera.position.y = initialY;
+  
+    // Set the camera's new rotation
+    camera.rotation.set(cameraRotation.x, cameraRotation.y, 0);
+
+    // Set the camera's new rotation
+    camera.rotation.set(0, 0, 0); // Reset the rotation
+    camera.rotateOnAxis(new THREE.Vector3(0, 1, 0), cameraRotation.y);
+    camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), cameraRotation.x);
+    
     renderer.render(scene, camera);
   }
 
