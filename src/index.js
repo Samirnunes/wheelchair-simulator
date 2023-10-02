@@ -87,11 +87,13 @@ function animate() {
     if (movementKeys.s) cameraPosition.sub(forward.clone().multiplyScalar(cameraSpeed));
     if (movementKeys.w) cameraPosition.add(forward.clone().multiplyScalar(cameraSpeed));
   
+    console.log(Math.abs(mouse.x))
+
     // Determine which axis to rotate based on the mouse movement
-    if (Math.abs(delta.x) > Math.abs(delta.y)) {
+    if (Math.abs(delta.x) > Math.abs(delta.y) & Math.abs(mouse.x) * sizes.width > 0.5 * sizes.width/2) {
         // Update camera rotation based on horizontal mouse movement (around Y-axis)
         cameraRotation.y -= delta.x * sensitivity;
-    } else {
+    } else if(Math.abs(delta.x) <= Math.abs(delta.y) & Math.abs(mouse.y) * sizes.height > 0.5 * sizes.height/2){
         // Update camera rotation based on vertical mouse movement (around X-axis)
         cameraRotation.x += delta.y * sensitivity;
 
