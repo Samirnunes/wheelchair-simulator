@@ -10,8 +10,6 @@ loader.load("../assets/city.glb", function(glb){
         if ( child.material ){
             child.material.metalness = 0;
             child.material.side = THREE.DoubleSide;
-            child.material.transparency = false;
-            child.material.opacity = 1;
         } 
     } );
     scene.add(glb.scene);
@@ -27,7 +25,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-const camera = new THREE.PerspectiveCamera(75, sizes.width/sizes.height, 0.1, 10000)
+const camera = new THREE.PerspectiveCamera(80, sizes.width/sizes.height, 0.1, 10000)
 camera.position.set(0, 1, 2)
 scene.add(camera)
 
@@ -62,7 +60,9 @@ document.addEventListener("keyup", (event) => {
 });
 
 const renderer = new THREE.WebGL1Renderer({
-    canvas: canvas
+    canvas: canvas,
+    alpha: true, 
+    depth: true
 });
 
 renderer.setSize(sizes.width, sizes.height)
