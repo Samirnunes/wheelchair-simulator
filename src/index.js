@@ -6,50 +6,28 @@ const scene = new THREE.Scene()
 
 const loader = new GLTFLoader()
 loader.load("../assets/city.glb", function(glb){
-    const root = glb.scene;
-    scene.add(root);
+    glb.scene.traverse( child => {
+        if ( child.material ){
+            child.material.metalness = 0;
+            child.material.side = THREE.DoubleSide;
+            child.material.transparency = false;
+            child.material.opacity = 1;
+        } 
+    } );
+    scene.add(glb.scene);
 }, function(error){
     console.log("An error occurred")
 })
 
-let materialArray = [];
-let texture_ft = new THREE.TextureLoader().load('../assets/cubemaps/sky_front.jpg')
-let texture_bk = new THREE.TextureLoader().load('../assets/cubemaps/sky_back.jpg')
-let texture_up = new THREE.TextureLoader().load('../assets/cubemaps/sky_up.jpg')
-let texture_dn = new THREE.TextureLoader().load('../assets/cubemaps/sky_down.jpg')
-let texture_rt = new THREE.TextureLoader().load('../assets/cubemaps/sky_right.jpg')
-let texture_lf = new THREE.TextureLoader().load('../assets/cubemaps/sky_left.jpg')
-
-materialArray.push(new THREE.MeshBasicMaterial({map: texture_ft}));
-materialArray.push(new THREE.MeshBasicMaterial({map: texture_bk}));
-materialArray.push(new THREE.MeshBasicMaterial({map: texture_up}));
-materialArray.push(new THREE.MeshBasicMaterial({map: texture_dn}));
-materialArray.push(new THREE.MeshBasicMaterial({map: texture_rt}));
-materialArray.push(new THREE.MeshBasicMaterial({map: texture_lf}));
-
-for(let i=0;i<6;i++) 
-    materialArray[i].side = THREE.DoubleSide;
-
-var skyboxGeo = new THREE.BoxGeometry(10000, 10000, 10000);
-let skybox = new THREE.Mesh(skyboxGeo, materialArray);
-scene.add(skybox);
-
-const hemLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
-scene.add( hemLight );
-
-const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-dirLight.position.set(2, 2, 5)
-scene.add(dirLight)
-
-const ambLight = new THREE.AmbientLight( 0xffffff, 1 ); // soft white light
-scene.add( ambLight );
+const ambLight = new THREE.AmbientLight('white', 2);
+scene.add(ambLight);
 
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
 }
 
-const camera = new THREE.PerspectiveCamera(75, sizes.width/sizes.height, 0.1, 100)
+const camera = new THREE.PerspectiveCamera(75, sizes.width/sizes.height, 0.1, 10000)
 camera.position.set(0, 1, 2)
 scene.add(camera)
 
@@ -85,7 +63,7 @@ document.addEventListener("keyup", (event) => {
 
 const renderer = new THREE.WebGL1Renderer({
     canvas: canvas
-})
+});
 
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
