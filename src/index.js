@@ -6,18 +6,43 @@ const scene = new THREE.Scene()
 
 const loader = new GLTFLoader()
 loader.load("../assets/city.glb", function(glb){
-    console.log(glb)
     const root = glb.scene;
     scene.add(root);
-}, function(xhr){
-    console.log((xhr.loaded/xhr.total * 100) + "% loaded")
 }, function(error){
     console.log("An error occurred")
 })
 
-const light = new THREE.DirectionalLight(0xffffff, 1)
-light.position.set(2,2,5)
-scene.add(light)
+let materialArray = [];
+let texture_ft = new THREE.TextureLoader().load('../assets/cubemaps/sky_front.jpg')
+let texture_bk = new THREE.TextureLoader().load('../assets/cubemaps/sky_back.jpg')
+let texture_up = new THREE.TextureLoader().load('../assets/cubemaps/sky_up.jpg')
+let texture_dn = new THREE.TextureLoader().load('../assets/cubemaps/sky_down.jpg')
+let texture_rt = new THREE.TextureLoader().load('../assets/cubemaps/sky_right.jpg')
+let texture_lf = new THREE.TextureLoader().load('../assets/cubemaps/sky_left.jpg')
+
+materialArray.push(new THREE.MeshBasicMaterial({map: texture_ft}));
+materialArray.push(new THREE.MeshBasicMaterial({map: texture_bk}));
+materialArray.push(new THREE.MeshBasicMaterial({map: texture_up}));
+materialArray.push(new THREE.MeshBasicMaterial({map: texture_dn}));
+materialArray.push(new THREE.MeshBasicMaterial({map: texture_rt}));
+materialArray.push(new THREE.MeshBasicMaterial({map: texture_lf}));
+
+for(let i=0;i<6;i++) 
+    materialArray[i].side = THREE.DoubleSide;
+
+var skyboxGeo = new THREE.BoxGeometry(10000, 10000, 10000);
+let skybox = new THREE.Mesh(skyboxGeo, materialArray);
+scene.add(skybox);
+
+const hemLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
+scene.add( hemLight );
+
+const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+dirLight.position.set(2, 2, 5)
+scene.add(dirLight)
+
+const ambLight = new THREE.AmbientLight( 0xffffff, 1 ); // soft white light
+scene.add( ambLight );
 
 const sizes = {
     width: window.innerWidth,
@@ -86,8 +111,6 @@ function animate() {
     if (movementKeys.d) cameraPosition.add(right.clone().multiplyScalar(cameraSpeed));
     if (movementKeys.s) cameraPosition.sub(forward.clone().multiplyScalar(cameraSpeed));
     if (movementKeys.w) cameraPosition.add(forward.clone().multiplyScalar(cameraSpeed));
-  
-    console.log(Math.abs(mouse.x))
 
     // Determine which axis to rotate based on the mouse movement
     if (Math.abs(delta.x) > Math.abs(delta.y) & Math.abs(mouse.x) * sizes.width > 0.5 * sizes.width/2) {
