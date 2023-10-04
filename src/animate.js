@@ -1,38 +1,15 @@
 import * as THREE from "../node_modules/three/build/three.module.js"
-import {CityAdmin} from "./city_admin.js"
-import {LightAdmin} from "./light_admin.js"
-import {CameraAdmin} from "./camera_admin.js"
-import {MovementAdmin} from "./movement_admin.js"
-import {RendererAdmin} from "./renderer_admin.js"
 
-const canvas = document.querySelector('.webgl')
-const scene = new THREE.Scene()
-const sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight
-}
-
-var cityAdmin = new CityAdmin()
-var lightAdmin = new LightAdmin()
-var cameraAdmin = new CameraAdmin(sizes)
-var movementAdmin = new MovementAdmin()
-var rendererAdmin = new RendererAdmin(canvas, sizes)
-
-console.log(movementAdmin.mouse)
-
-cityAdmin.addToScene(scene)
-lightAdmin.addToScene(scene)
-cameraAdmin.addToScene(scene)
-
-function animate() {
+function animate(scene, sizes, cameraAdmin, movementAdmin, rendererAdmin) {
     requestAnimationFrame(animate);
 
     var mouse = movementAdmin.mouse;
+    console.log(mouse);
     const previousMouse = movementAdmin.previousMouse;
     const movementKeys = movementAdmin.movementKeys;
     var cameraQuaternion = cameraAdmin.cameraQuaternion;
-    var cameraPosition = cameraAdmin.cameraInitialPosition;
-    var cameraRotation = cameraAdmin.cameraInitialRotation;
+    var cameraPosition = cameraAdmin.camera.position;
+    var cameraRotation = cameraAdmin.camera.rotation;
     const cameraSensitivity = cameraAdmin.cameraSensitivity;
     const cameraSpeed = cameraAdmin.cameraSpeed;
     const initialY = cameraPosition.y;
@@ -66,12 +43,15 @@ function animate() {
     cameraQuaternion.setFromRotationMatrix(
         new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(cameraRotation.x, cameraRotation.y, 0, 'YXZ'))
     );
-
-    // Restore the initial Y position
-    cameraPosition.y = initialY;
     
     // Set the camera's new position
     cameraAdmin.camera.position.copy(cameraPosition);
+  
+    // Restore the initial Y position
+    cameraAdmin.camera.position.y = initialY;
+  
+    // Set the camera's new rotation
+    cameraAdmin.camera.rotation.set(cameraRotation.x, cameraRotation.y, 0);
 
     // Set the camera's new rotation
     cameraAdmin.camera.rotation.set(0, 0, 0); // Reset the rotation
@@ -80,5 +60,3 @@ function animate() {
     
     rendererAdmin.renderer.render(scene, cameraAdmin.camera);
   }
-
-animate()
