@@ -2,7 +2,6 @@ import * as THREE from "../node_modules/three/build/three.module.js"
 import {CityAdmin} from "./city_admin.js"
 import {LightAdmin} from "./light_admin.js"
 import {CameraAdmin} from "./camera_admin.js"
-import {MovementAdmin} from "./movement_admin.js"
 import {RendererAdmin} from "./renderer_admin.js"
 
 const canvas = document.querySelector('.webgl')
@@ -15,10 +14,7 @@ const sizes = {
 var cityAdmin = new CityAdmin()
 var lightAdmin = new LightAdmin()
 var cameraAdmin = new CameraAdmin(sizes)
-var movementAdmin = new MovementAdmin()
 var rendererAdmin = new RendererAdmin(canvas, sizes)
-
-console.log(movementAdmin.mouse)
 
 cityAdmin.addToScene(scene)
 lightAdmin.addToScene(scene)
@@ -27,9 +23,9 @@ cameraAdmin.addToScene(scene)
 function animate() {
     requestAnimationFrame(animate);
 
-    var mouse = movementAdmin.mouse;
-    const previousMouse = movementAdmin.previousMouse;
-    const movementKeys = movementAdmin.movementKeys;
+    var mouse = cameraAdmin.mouse;
+    const previousMouse = cameraAdmin.previousMouse;
+    const movementKeys = cameraAdmin.movementKeys;
     var cameraQuaternion = cameraAdmin.cameraQuaternion;
     var cameraPosition = cameraAdmin.cameraInitialPosition;
     var cameraRotation = cameraAdmin.cameraInitialRotation;
