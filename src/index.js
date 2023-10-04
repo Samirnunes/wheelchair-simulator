@@ -30,11 +30,11 @@ function animate() {
     var mouse = movementAdmin.mouse;
     const previousMouse = movementAdmin.previousMouse;
     const movementKeys = movementAdmin.movementKeys;
-    const movementSpeed = movementAdmin.movementSpeed;
     var cameraQuaternion = cameraAdmin.cameraQuaternion;
     var cameraPosition = cameraAdmin.cameraInitialPosition;
     var cameraRotation = cameraAdmin.cameraInitialRotation;
-    const cameraRotationSpeed= cameraAdmin.cameraRotationSpeed;
+    const cameraSensitivity = cameraAdmin.cameraSensitivity;
+    const cameraSpeed = cameraAdmin.cameraSpeed;
     const initialY = cameraPosition.y;
   
     // Calculate the change in mouse position
@@ -45,18 +45,18 @@ function animate() {
     const right = new THREE.Vector3(1, 0, 0).applyQuaternion(cameraQuaternion);
   
     // Update camera position based on ASWD key presses
-    if (movementKeys.a) cameraPosition.sub(right.clone().multiplyScalar(movementSpeed));
-    if (movementKeys.d) cameraPosition.add(right.clone().multiplyScalar(movementSpeed));
-    if (movementKeys.s) cameraPosition.sub(forward.clone().multiplyScalar(movementSpeed));
-    if (movementKeys.w) cameraPosition.add(forward.clone().multiplyScalar(movementSpeed));
+    if (movementKeys.a) cameraPosition.sub(right.clone().multiplyScalar(cameraSpeed));
+    if (movementKeys.d) cameraPosition.add(right.clone().multiplyScalar(cameraSpeed));
+    if (movementKeys.s) cameraPosition.sub(forward.clone().multiplyScalar(cameraSpeed));
+    if (movementKeys.w) cameraPosition.add(forward.clone().multiplyScalar(cameraSpeed));
 
     // Determine which axis to rotate based on the mouse movement
     if (Math.abs(delta.x) > Math.abs(delta.y) & Math.abs(mouse.x) * sizes.width > 0.5 * sizes.width/2) {
         // Update camera rotation based on horizontal mouse movement (around Y-axis)
-        cameraRotation.y -= delta.x * cameraRotationSpeed;
+        cameraRotation.y -= delta.x * cameraSensitivity;
     } else if(Math.abs(delta.x) <= Math.abs(delta.y) & Math.abs(mouse.y) * sizes.height > 0.5 * sizes.height/2){
         // Update camera rotation based on vertical mouse movement (around X-axis)
-        cameraRotation.x += delta.y * cameraRotationSpeed;
+        cameraRotation.x += delta.y * cameraSensitivity;
 
         // Limit vertical rotation to prevent camera flipping
         cameraRotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, cameraRotation.x));

@@ -7,7 +7,8 @@ export class CameraAdmin{
         this.cameraInitialRotation = new THREE.Vector3(0, 0, 0);
         this.camera.position.set(this.cameraInitialPosition.x, this.cameraInitialPosition.y, this.cameraInitialPosition.z);
         this.camera.rotation.set(this.cameraInitialRotation.x, this.cameraInitialRotation.y, this.cameraInitialRotation.z);
-        this.cameraRotationSpeed = 0.2;
+        this.cameraSpeed = 0.8;
+        this.cameraSensitivity = 0.2;
         this.cameraQuaternion = new THREE.Quaternion();
     }
 
