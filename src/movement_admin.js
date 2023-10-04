@@ -5,6 +5,7 @@ export class MovementAdmin{
         this.mouse = new THREE.Vector2();
         this.previousMouse = new THREE.Vector2();
         this.movementKeys = { a: false, s: false, w: false, d: false };
+        this.movementSpeed = 0.8;
 
         document.addEventListener("mousemove", (event) => {
             this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
