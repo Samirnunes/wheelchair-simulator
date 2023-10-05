@@ -10,11 +10,17 @@ export class CameraAdmin{
         this.camera.rotation.set(this.cameraInitialRotation.x, this.cameraInitialRotation.y, this.cameraInitialRotation.z);
         this.cameraSpeed = 0.3;
         this.cameraSensitivity = 0.04;
-
         this.mouse = new THREE.Vector2();
         this.previousMouse = new THREE.Vector2();
         this.movementKeys = { a: false, s: false, w: false, d: false };
+        this.#addEventListeners()
+    }
 
+    addToScene(scene){
+        scene.add(this.camera)
+    }
+
+    #addEventListeners(){
         document.addEventListener("mousemove", (event) => {
             this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
             this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -33,9 +39,5 @@ export class CameraAdmin{
             if (event.key === "w") this.movementKeys.w = false;
             if (event.key === "s") this.movementKeys.s = false;
         });
-    }
-
-    addToScene(scene){
-        scene.add(this.camera)
     }
 }
