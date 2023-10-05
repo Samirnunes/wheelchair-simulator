@@ -1,9 +1,9 @@
 import * as THREE from "../node_modules/three/build/three.module.js"
+import * as ANIMATIONS from "./animation_moves.js"
 import {CityAdmin} from "./city_admin.js"
 import {LightAdmin} from "./light_admin.js"
 import {CameraAdmin} from "./camera_admin.js"
 import {RendererAdmin} from "./renderer_admin.js"
-import * as ANIMATIONS from "./animation_moves.js"
 
 const canvas = document.querySelector('.webgl')
 const scene = new THREE.Scene()
