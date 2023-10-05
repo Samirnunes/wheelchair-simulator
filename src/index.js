@@ -1,5 +1,5 @@
 import * as THREE from "../node_modules/three/build/three.module.js"
-import * as ANIMATIONS from "./animation_moves.js"
+import * as ANIMATIONS from "./animations.js"
 import {CityAdmin} from "./city_admin.js"
 import {LightAdmin} from "./light_admin.js"
 import {CameraAdmin} from "./camera_admin.js"
