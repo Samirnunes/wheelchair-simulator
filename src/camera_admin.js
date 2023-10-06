@@ -16,7 +16,7 @@ export class CameraAdmin{
         this.movementKeys = { a: false, s: false, w: false, d: false };
         const cameraShape = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5))
         this.cameraBody = new CANNON.Body({
-            mass: 1,
+            mass: 0,
             shape: cameraShape
           });
         this.#addEventListeners()

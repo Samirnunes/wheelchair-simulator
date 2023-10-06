@@ -4,7 +4,6 @@ export function moveCityBodies(meshBodyPairs){
     for(var pair of meshBodyPairs){
         var mesh = pair[0];
         var body = pair[1];
-
         mesh.position.copy(body.position);
         mesh.quaternion.copy(body.quaternion);
     }
@@ -15,12 +14,11 @@ export function moveCameraBody(cameraBody, cameraAdmin){
     cameraBody.quaternion.copy(cameraAdmin.camera.quaternion);
 }
 
-export function translateCamera(cameraAdmin){
+export function translateCamera(cameraAdmin, gravity){
     const movementKeys = cameraAdmin.movementKeys;
     var cameraQuaternion = cameraAdmin.cameraQuaternion;
     var cameraPosition = cameraAdmin.cameraInitialPosition;
     const cameraSpeed = cameraAdmin.cameraSpeed;
-    const initialY = cameraPosition.y;
 
     // Define movement vectors relative to the camera's orientation
     const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(cameraQuaternion);
@@ -31,10 +29,11 @@ export function translateCamera(cameraAdmin){
     if (movementKeys.d) cameraPosition.add(right.clone().multiplyScalar(cameraSpeed));
     if (movementKeys.s) cameraPosition.sub(forward.clone().multiplyScalar(cameraSpeed));
     if (movementKeys.w) cameraPosition.add(forward.clone().multiplyScalar(cameraSpeed));
-
-    // Restore the initial Y position
-    //cameraPosition.y = initialY;
     
+    if (gravity) {
+        cameraPosition.sub(gravity.clone());
+    }
+
     // Set the camera's new position
     cameraAdmin.camera.position.copy(cameraPosition);
 }

@@ -37,7 +37,7 @@ export class CityAdmin{
 
     #getBody(mesh){
         var body = new CANNON.Body({
-            mass: 1,
+            mass: 0,
             shape: CANNON_UTILS.CreateCannonShape(mesh.geometry)
         })
         body.position.copy(mesh.position);

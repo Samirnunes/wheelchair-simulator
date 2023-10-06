@@ -12,31 +12,32 @@ const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
 }
-const world = new CANNON.World();
-world.gravity.set(0, 9.81, 0);
+const myWorld = new CANNON.World();
+myWorld.gravity.set(0, 0.1, 0);
 
 var cityAdmin = new CityAdmin();
 var lightAdmin = new LightAdmin();
 var cameraAdmin = new CameraAdmin(sizes);
 var rendererAdmin = new RendererAdmin(canvas, sizes);
 
-cityAdmin.addToScene(scene, world);
+cityAdmin.addToScene(scene, myWorld);
 lightAdmin.addToScene(scene);
-cameraAdmin.addToScene(scene, world);
+cameraAdmin.addToScene(scene, myWorld);
 
 var meshBodyPairs = cityAdmin.getMeshBodyPairs();
 var cameraBody = cameraAdmin.getCameraBody();
+meshBodyPairs = meshBodyPairs.filter(item => item !== cameraBody);
 
 function animate() {
     requestAnimationFrame(animate);
   
-    ANIMATIONS.translateCamera(cameraAdmin);
+    ANIMATIONS.translateCamera(cameraAdmin, myWorld.gravity);
     ANIMATIONS.rotateCamera(sizes, cameraAdmin);
     ANIMATIONS.moveCameraBody(cameraBody, cameraAdmin);
-    ANIMATIONS.moveCityBodies(meshBodyPairs);
+    //ANIMATIONS.moveCityBodies(meshBodyPairs);
     
     rendererAdmin.renderer.render(scene, cameraAdmin.camera);
-    world.step(1/60);
+    myWorld.step(1/60);
   }
 
 animate()
