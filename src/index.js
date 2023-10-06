@@ -15,9 +15,6 @@ const sizes = {
 const myWorld = new CANNON.World();
 myWorld.gravity.set(0, 0.1, 0);
 
-const axesHelper = new THREE.AxesHelper(100);
-myScene.add(axesHelper)
-
 var cityAdmin = new CityAdmin();
 var lightAdmin = new LightAdmin();
 var cameraAdmin = new CameraAdmin(sizes);
@@ -27,6 +24,17 @@ cityAdmin.addToScene(myScene, myWorld);
 lightAdmin.addToScene(myScene);
 cameraAdmin.addToScene(myScene, myWorld);
 
+const boxBody = new CANNON.Body({
+  mass: 2,
+  shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)),
+});
+boxBody.position.set(1, 20, 0);
+myWorld.addBody(boxBody);
+const boxGeometry = new THREE.BoxGeometry(2, 2, 2);
+const boxMaterial = new THREE.MeshNormalMaterial();
+const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+myScene.add(boxMesh);
+
 var meshBodyPairs = cityAdmin.getMeshBodyPairs();
 
 function animate() {
@@ -35,10 +43,12 @@ function animate() {
     ANIMATIONS.translateCamera(cameraAdmin, myWorld.gravity);
     ANIMATIONS.rotateCamera(cameraAdmin, sizes);
     ANIMATIONS.moveCityBodies(meshBodyPairs);
+    boxMesh.position.copy(boxBody.position);
+    boxMesh.quaternion.copy(boxBody.quaternion);
     //ANIMATIONS.handleCameraCollisions(cameraAdmin, myWorld)
     
-    rendererAdmin.renderer.render(myScene, cameraAdmin.camera);
     myWorld.step(1/60);
-  }
+    rendererAdmin.renderer.render(myScene, cameraAdmin.camera);
+}
 
 animate()
