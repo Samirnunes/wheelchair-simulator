@@ -1,6 +1,28 @@
 import * as THREE from "../node_modules/three/build/three.module.js"
+import * as CANNON from "../node_modules/cannon/build/cannon.js"
 
-export function translate(cameraAdmin){
+export function moveCityBodies(meshBodyPairs){
+    for(var pair of meshBodyPairs){
+        var mesh = pair[0];
+        var body = pair[1];
+
+        mesh.position.set(body.position.x, body.position.y, body.position.z);
+        mesh.quaternion.set(
+            body.quaternion.x,
+            body.quaternion.y,
+            body.quaternion.z,
+            body.quaternion.w
+        );
+
+    }
+}
+
+export function moveCameraBody(cameraBody, cameraAdmin){
+    cameraBody.position.copy(cameraAdmin.camera.position);
+    cameraBody.quaternion.copy(cameraAdmin.camera.quaternion);
+}
+
+export function translateCamera(cameraAdmin){
     const movementKeys = cameraAdmin.movementKeys;
     var cameraQuaternion = cameraAdmin.cameraQuaternion;
     var cameraPosition = cameraAdmin.cameraInitialPosition;
@@ -18,13 +40,13 @@ export function translate(cameraAdmin){
     if (movementKeys.w) cameraPosition.add(forward.clone().multiplyScalar(cameraSpeed));
 
     // Restore the initial Y position
-    cameraPosition.y = initialY;
+    //cameraPosition.y = initialY;
     
     // Set the camera's new position
     cameraAdmin.camera.position.copy(cameraPosition);
 }
 
-export function rotate(sizes, cameraAdmin){
+export function rotateCamera(sizes, cameraAdmin){
     var mouse = cameraAdmin.mouse;
     const previousMouse = cameraAdmin.previousMouse;
     var cameraRotation = cameraAdmin.cameraInitialRotation;
