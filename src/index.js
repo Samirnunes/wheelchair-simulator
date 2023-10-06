@@ -15,6 +15,9 @@ const sizes = {
 const myWorld = new CANNON.World();
 myWorld.gravity.set(0, 0.1, 0);
 
+const axesHelper = new THREE.AxesHelper(100);
+scene.add(axesHelper)
+
 var cityAdmin = new CityAdmin();
 var lightAdmin = new LightAdmin();
 var cameraAdmin = new CameraAdmin(sizes);
