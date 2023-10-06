@@ -40,12 +40,8 @@ export class CityAdmin{
             mass: 1,
             shape: CANNON_UTILS.CreateCannonShape(mesh.geometry)
         })
-        body.position.x = mesh.position.x
-        body.position.y = mesh.position.y
-        body.position.z = mesh.position.z
-        const quaternion = new CANNON.Quaternion();
-        quaternion.setFromEuler(mesh.rotation.x, mesh.rotation.y, mesh.rotation.z);
-        body.quaternion.copy(quaternion);
+        body.position.copy(mesh.position);
+        body.quaternion.copy(mesh.quaternion);
 
         return body
     }

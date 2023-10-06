@@ -13,7 +13,7 @@ const sizes = {
     height: window.innerHeight
 }
 const world = new CANNON.World();
-world.gravity.set(0, -9.81, 0);
+world.gravity.set(0, 9.81, 0);
 
 var cityAdmin = new CityAdmin();
 var lightAdmin = new LightAdmin();
@@ -36,6 +36,7 @@ function animate() {
     ANIMATIONS.moveCityBodies(meshBodyPairs);
     
     rendererAdmin.renderer.render(scene, cameraAdmin.camera);
+    world.step(1/60);
   }
 
 animate()
