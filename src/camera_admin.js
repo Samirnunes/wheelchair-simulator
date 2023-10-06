@@ -1,5 +1,4 @@
 import * as THREE from "../node_modules/three/build/three.module.js"
-import * as CANNON from "../node_modules/cannon/build/cannon.js"
 
 export class CameraAdmin{
     constructor(sizes){
@@ -14,21 +13,11 @@ export class CameraAdmin{
         this.mouse = new THREE.Vector2();
         this.previousMouse = new THREE.Vector2();
         this.movementKeys = { a: false, s: false, w: false, d: false };
-        const cameraShape = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5))
-        this.cameraBody = new CANNON.Body({
-            mass: 0,
-            shape: cameraShape
-          });
         this.#addEventListeners()
     }
 
-    addToScene(scene, world){
+    addToScene(scene){
         scene.add(this.camera)
-        world.addBody(this.cameraBody);
-    }
-
-    getCameraBody(){
-        return this.cameraBody;
     }
 
     #addEventListeners(){

@@ -7,7 +7,7 @@ import {CameraAdmin} from "./camera_admin.js"
 import {RendererAdmin} from "./renderer_admin.js"
 
 const canvas = document.querySelector('.webgl')
-const scene = new THREE.Scene()
+const myScene = new THREE.Scene()
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
@@ -16,30 +16,28 @@ const myWorld = new CANNON.World();
 myWorld.gravity.set(0, 0.1, 0);
 
 const axesHelper = new THREE.AxesHelper(100);
-scene.add(axesHelper)
+myScene.add(axesHelper)
 
 var cityAdmin = new CityAdmin();
 var lightAdmin = new LightAdmin();
 var cameraAdmin = new CameraAdmin(sizes);
 var rendererAdmin = new RendererAdmin(canvas, sizes);
 
-cityAdmin.addToScene(scene, myWorld);
-lightAdmin.addToScene(scene);
-cameraAdmin.addToScene(scene, myWorld);
+cityAdmin.addToScene(myScene, myWorld);
+lightAdmin.addToScene(myScene);
+cameraAdmin.addToScene(myScene, myWorld);
 
 var meshBodyPairs = cityAdmin.getMeshBodyPairs();
-var cameraBody = cameraAdmin.getCameraBody();
-meshBodyPairs = meshBodyPairs.filter(item => item !== cameraBody);
 
 function animate() {
     requestAnimationFrame(animate);
   
     ANIMATIONS.translateCamera(cameraAdmin, myWorld.gravity);
-    ANIMATIONS.rotateCamera(sizes, cameraAdmin);
-    ANIMATIONS.moveCameraBody(cameraBody, cameraAdmin);
-    //ANIMATIONS.moveCityBodies(meshBodyPairs);
+    ANIMATIONS.rotateCamera(cameraAdmin, sizes);
+    ANIMATIONS.moveCityBodies(meshBodyPairs);
+    //ANIMATIONS.handleCameraCollisions(cameraAdmin, myWorld)
     
-    rendererAdmin.renderer.render(scene, cameraAdmin.camera);
+    rendererAdmin.renderer.render(myScene, cameraAdmin.camera);
     myWorld.step(1/60);
   }
 
