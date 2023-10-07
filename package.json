@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "cannon-es-debugger": "^1.0.0",
-    "three": "^0.157.0"
+    "three": "^0.157.0",
+    "three-to-cannon": "^4.3.0"
   },
   "devDependencies": {
     "cannon-es": "^0.20.0",

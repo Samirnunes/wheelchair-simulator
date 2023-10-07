@@ -1,6 +1,7 @@
 import * as THREE from "../node_modules/three/build/three.module.js"
 import * as CANNON from "../node_modules/cannon-es/dist/cannon-es.js"
 import * as ANIMATIONS from "./animations.js"
+import * as TEST from "./test_utils.js"
 import {CityAdmin} from "./city_admin.js"
 import {LightAdmin} from "./light_admin.js"
 import {CameraAdmin} from "./camera_admin.js"
@@ -28,18 +29,7 @@ var rendererAdmin = new RendererAdmin(canvas, sizes);
 cityAdmin.addToScene(myScene, myWorld);
 lightAdmin.addToScene(myScene);
 cameraAdmin.addToScene(myScene, myWorld);
-
-// only for test
-const boxBody = new CANNON.Body({
-  mass: 0.5,
-  shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)),
-});
-boxBody.position.set(1, 20, 0);
-myWorld.addBody(boxBody);
-const boxGeometry = new THREE.BoxGeometry(2, 2, 2);
-const boxMaterial = new THREE.MeshNormalMaterial();
-const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
-myScene.add(boxMesh);
+const {boxMesh, boxBody} = TEST.addTestBox(myScene, myWorld);
 
 var meshBodyPairs = cityAdmin.getMeshBodyPairs();
 
@@ -48,8 +38,7 @@ function animate() {
     
     ANIMATIONS.translateCamera(cameraAdmin, cameraGravity);
     ANIMATIONS.rotateCamera(cameraAdmin, sizes);
-    ANIMATIONS.moveCityBodies(meshBodyPairs);
-    // only for test
+    
     boxMesh.position.copy(boxBody.position);
     boxMesh.quaternion.copy(boxBody.quaternion);
     

@@ -1,6 +1,6 @@
 import * as THREE from "../node_modules/three/build/three.module.js"
 import * as CANNON from "../node_modules/cannon-es/dist/cannon-es.js"
-import * as CANNON_UTILS from "./cannon_utils.js"
+import { threeToCannon, ShapeType } from '../node_modules/three-to-cannon';
 import {GLTFLoader} from "../node_modules/three/examples/jsm/loaders/GLTFLoader.js"
 
 export class CityAdmin{
@@ -36,13 +36,13 @@ export class CityAdmin{
     }
 
     #getBody(mesh){
-        const bodyShape = CANNON_UTILS.meshToCannonShape(mesh)
+        const {shape, offset, quaternion} = threeToCannon(mesh, {type: ShapeType.BOX});
         var body = new CANNON.Body({
-            mass: 0,
-            shape: bodyShape,
+            mass: 0
         })
         body.position.copy(mesh.position);
         body.quaternion.copy(mesh.quaternion);
+        body.addShape(shape, offset, quaternion);
 
         return body
     }
