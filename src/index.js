@@ -34,7 +34,7 @@ const boxBody = new CANNON.Body({
   mass: 0.5,
   shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)),
 });
-boxBody.position.set(1, 1, 1);
+boxBody.position.set(1, 20, 0);
 myWorld.addBody(boxBody);
 const boxGeometry = new THREE.BoxGeometry(2, 2, 2);
 const boxMaterial = new THREE.MeshNormalMaterial();
