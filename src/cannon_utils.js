@@ -1,6 +1,9 @@
+import * as THREE from "../node_modules/three/build/three.module.js"
 import * as CANNON from "../node_modules/cannon-es/dist/cannon-es.js"
 
-export function boundingBoxToCannonShape(boundingBox) {
+export function meshToCannonShape(mesh) {
+    var boundingBox = new THREE.Box3();
+    boundingBox.setFromObject(mesh);
     // Extract the bounding box
     const { min, max } = boundingBox;
 
@@ -11,18 +14,8 @@ export function boundingBoxToCannonShape(boundingBox) {
   
     // Create a Cannon.js Box shape based on the dimensions
     const shape = new CANNON.Box(
-      new CANNON.Vec3(width/2, height/2, depth/2) 
+      new CANNON.Vec3(width, height, depth) 
     );
   
     return shape;
   }
-
-/*
-
-In Cannon.js:
-
-The x-axis corresponds to the Three.js x-axis (right).
-The y-axis corresponds to the Three.js z-axis (forwards).
-The z-axis corresponds to the Three.js y-axis (upwards).
-
-*/

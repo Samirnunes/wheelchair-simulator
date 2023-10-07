@@ -36,12 +36,7 @@ export class CityAdmin{
     }
 
     #getBody(mesh){
-        var boundingBox = new THREE.Box3();
-        boundingBox.setFromObject(mesh);
-        //mesh.updateMatrixWorld(true);
-        //boundingBox.applyMatrix4(mesh.matrixWorld);
-
-        const bodyShape = CANNON_UTILS.boundingBoxToCannonShape(boundingBox)
+        const bodyShape = CANNON_UTILS.meshToCannonShape(mesh)
         var body = new CANNON.Body({
             mass: 0,
             shape: bodyShape,
