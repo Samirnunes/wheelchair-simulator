@@ -1,5 +1,5 @@
 import * as THREE from "../node_modules/three/build/three.module.js"
-import * as CANNON from "../node_modules/cannon/build/cannon.js"
+import * as CANNON from "../node_modules/cannon-es/dist/cannon-es.js"
 
 export function moveCityBodies(meshBodyPairs){
     for(var pair of meshBodyPairs){
@@ -10,53 +10,12 @@ export function moveCityBodies(meshBodyPairs){
     }
 }
 
-export function handleCameraCollisions(cameraAdmin, world) {
-    const cameraPosition = cameraAdmin.camera.position.clone();
-    const cameraQuaternion = cameraAdmin.cameraQuaternion;
-
-    // Define the ray's direction (e.g., the camera's forward direction)
-    const raycastDirection = new CANNON.Vec3(0, 0, -1).applyQuaternion(cameraQuaternion);
-
-    // Set the ray's length (adjust as needed)
-    const rayLength = 1; // Adjust the length as needed to cover the expected collision distance
-
-    // Calculate the ray's end position
-    const rayEndPosition = new CANNON.Vec3();
-    raycastDirection.mult(rayLength, rayEndPosition);
-    rayEndPosition.vadd(cameraPosition, rayEndPosition);
-
-    // Create a ray for collision detection
-    const result = new CANNON.RaycastResult();
-
-    // Iterate through all bodies in the world
-    for (const body of world.bodies) {
-        // Cast the ray to detect collisions with this body
-        if (body.shapes.length > 0) {
-            const intersectionFound = body.raycastClosest(
-                cameraPosition, // Start position of the ray
-                rayEndPosition, // End position of the ray
-                result // Store the result
-            );
-
-            if (intersectionFound) {
-                cameraAdmin.camera.position.copy(result.hitPointWorld);
-                // Handle collision response here
-                // You can adjust camera position, direction, or apply forces to simulate collisions
-                // Example: cameraAdmin.camera.position.copy(result.hitPointWorld);
-                
-                // Prevent the camera from moving through the collided object
-                // You can adjust the camera's direction as needed
-                // Example: cameraQuaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.PI);
-            }
-        }
-    }
-}
-
 export function translateCamera(cameraAdmin, gravity){
     const movementKeys = cameraAdmin.movementKeys;
     var cameraQuaternion = cameraAdmin.cameraQuaternion;
     var cameraPosition = cameraAdmin.cameraInitialPosition;
     const cameraSpeed = cameraAdmin.cameraSpeed;
+    const initialY = cameraPosition.y;
 
     // Define movement vectors relative to the camera's orientation
     const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(cameraQuaternion);
@@ -67,10 +26,13 @@ export function translateCamera(cameraAdmin, gravity){
     if (movementKeys.d) cameraPosition.add(right.clone().multiplyScalar(cameraSpeed));
     if (movementKeys.s) cameraPosition.sub(forward.clone().multiplyScalar(cameraSpeed));
     if (movementKeys.w) cameraPosition.add(forward.clone().multiplyScalar(cameraSpeed));
-    
+
     if (gravity) {
-        cameraPosition.sub(gravity.clone());
+        cameraPosition.sub(gravity);
     }
+
+    // Restore the initial Y position
+    cameraPosition.y = initialY;
 
     // Set the camera's new position
     cameraAdmin.camera.position.copy(cameraPosition);

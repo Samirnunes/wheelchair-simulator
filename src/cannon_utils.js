@@ -1,16 +1,29 @@
-import * as CANNON from "../node_modules/cannon/build/cannon.js"
+import * as CANNON from "../node_modules/cannon-es/dist/cannon-es.js"
 
-export function CreateCannonShape(geometry) {
-    let vertices;
+export function geometryToCannonShape(geometry) {
+    // Extract the bounding box from the geometry
+    geometry.computeBoundingBox();
+    const { min, max } = geometry.boundingBox;
+  
+    // Calculate the dimensions of the box
+    const width = max.x - min.x;
+    const height = max.y - min.y;
+    const depth = max.z - min.z;
+  
+    // Create a Cannon.js Box shape based on the dimensions
+    const shape = new CANNON.Box(
+      new CANNON.Vec3(0.1, 0.1, 0.1) 
+    );
+  
+    return shape;
+  }
 
-    if (geometry.index === null) {
-        vertices = geometry.attributes.position.array;
-    } else {
-        const nonIndexedGeometry = geometry.clone().toNonIndexed();
-        vertices = nonIndexedGeometry.attributes.position.array;
-    }
+/*
 
-    const indices = Object.keys(vertices).map(Number);
-    
-    return new CANNON.Trimesh(vertices.map(v => Number(v)), indices);
-}
+In Cannon.js:
+
+The x-axis corresponds to the Three.js x-axis (right).
+The y-axis corresponds to the Three.js z-axis (forwards).
+The z-axis corresponds to the Three.js y-axis (upwards).
+
+*/
