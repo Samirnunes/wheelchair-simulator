@@ -6,7 +6,7 @@ import {GLTFLoader} from "../node_modules/three/examples/jsm/loaders/GLTFLoader.
 export class CityAdmin{
     constructor(){
         this.loader = new GLTFLoader()
-        this.city_path = "../assets/city.glb"
+        this.city_path = "../assets/city1/city.glb"
         this.meshBodyPairs = [];
     }
 
@@ -36,13 +36,14 @@ export class CityAdmin{
     }
 
     #getBody(mesh){
-        const {shape, offset, quaternion} = threeToCannon(mesh, {type: ShapeType.BOX});
+        const {shape, offset, quaternion} = threeToCannon(mesh, {type: ShapeType.HULL});
         var body = new CANNON.Body({
             mass: 0
         })
         body.position.copy(mesh.position);
         body.quaternion.copy(mesh.quaternion);
         body.addShape(shape, offset, quaternion);
+        console.log(shape);
 
         return body
     }
