@@ -12,12 +12,12 @@ export class CityAdmin{
 
     addToScene(scene, world) {
         this.loader.load(this.city_path, glb => {
-            glb.scene.traverse(child => {
-                if (child instanceof THREE.Mesh) {
-                    this.#modifyMaterial(child);
-                    const body = this.#getBody(child);
+            glb.scene.traverse(mesh => {
+                if (mesh instanceof THREE.Mesh) {
+                    this.#modifyMaterial(mesh);
+                    const body = this.#getBody(mesh);
                     world.addBody(body);
-                    this.meshBodyPairs.push([child, body]);
+                    this.meshBodyPairs.push([mesh, body]);
                 }
             });
             scene.add(glb.scene);
@@ -36,7 +36,12 @@ export class CityAdmin{
     }
 
     #getBody(mesh){
-        const bodyShape = CANNON_UTILS.geometryToCannonShape(mesh.geometry)
+        var boundingBox = new THREE.Box3();
+        boundingBox.setFromObject(mesh);
+        //mesh.updateMatrixWorld(true);
+        //boundingBox.applyMatrix4(mesh.matrixWorld);
+
+        const bodyShape = CANNON_UTILS.boundingBoxToCannonShape(boundingBox)
         var body = new CANNON.Body({
             mass: 0,
             shape: bodyShape,
