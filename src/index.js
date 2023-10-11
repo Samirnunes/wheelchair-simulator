@@ -15,6 +15,9 @@ const sizes = {
     height: window.innerHeight
 }
 const myWorld = new CANNON.World();
+myWorld.broadphase = new CANNON.NaiveBroadphase();
+myWorld.solver.iterations = 10;
+myWorld.broadphase.useBoundingBoxes = true;
 const yGravity = -9.81;
 myWorld.gravity.set(0, yGravity, 0);
 var cameraGravity = new THREE.Vector3(0, -yGravity/100, 0);
@@ -38,10 +41,16 @@ function animate() {
     
     ANIMATIONS.translateCamera(cameraAdmin, cameraGravity);
     ANIMATIONS.rotateCamera(cameraAdmin, sizes);
+    ANIMATIONS.moveCityBodies(meshBodyPairs);
     
     boxMesh.position.copy(boxBody.position);
     boxMesh.quaternion.copy(boxBody.quaternion);
     
+    cameraAdmin.camera.position.copy(cameraAdmin.cameraBody.position);
+    cameraAdmin.camera.quaternion.copy(cameraAdmin.cameraBody.quaternion);
+    cameraAdmin.cameraMesh.position.copy(cameraAdmin.cameraBody.position);
+    cameraAdmin.cameraMesh.quaternion.copy(cameraAdmin.cameraBody.quaternion);
+
     myWorld.step(1/60);
     cannonDebugger.update() 
     rendererAdmin.renderer.render(myScene, cameraAdmin.camera);

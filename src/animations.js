@@ -27,17 +27,15 @@ export function translateCamera(cameraAdmin, gravity){
     if (movementKeys.s) cameraPosition.sub(forward.clone().multiplyScalar(cameraSpeed));
     if (movementKeys.w) cameraPosition.add(forward.clone().multiplyScalar(cameraSpeed));
 
-    if (gravity) {
-        cameraPosition.sub(gravity);
-    }
+    //if (gravity) {
+    //    cameraPosition.sub(gravity);
+    //}
 
     // Restore the initial Y position
-    cameraPosition.y = initialY;
+    //cameraPosition.y = initialY;
 
     // Set the camera's new position
-    cameraAdmin.camera.position.copy(cameraPosition);
     cameraAdmin.cameraBody.position.copy(cameraPosition);
-    cameraAdmin.cameraMesh.position.copy(cameraPosition);
 }
 
 export function rotateCamera(cameraAdmin, sizes){
