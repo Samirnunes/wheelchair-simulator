@@ -20,7 +20,6 @@ myWorld.solver.iterations = 10;
 myWorld.broadphase.useBoundingBoxes = true;
 const yGravity = -9.81;
 myWorld.gravity.set(0, yGravity, 0);
-var cameraGravity = new THREE.Vector3(0, -yGravity/100, 0);
 
 const cannonDebugger = new CannonDebugger(myScene, myWorld)
 
@@ -39,7 +38,7 @@ var meshBodyPairs = cityAdmin.getMeshBodyPairs();
 function animate() {
     requestAnimationFrame(animate);
     
-    ANIMATIONS.translateCamera(cameraAdmin, cameraGravity);
+    ANIMATIONS.translateCamera(cameraAdmin);
     ANIMATIONS.rotateCamera(cameraAdmin, sizes);
     ANIMATIONS.moveCityBodies(meshBodyPairs);
     

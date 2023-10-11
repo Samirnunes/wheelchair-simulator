@@ -12,14 +12,15 @@ export function moveCityBodies(meshBodyPairs){
 
 export function translateCamera(cameraAdmin){
     const movementKeys = cameraAdmin.movementKeys;
+    const cameraMovementSpeed = cameraAdmin.cameraMovementSpeed;
     var cameraQuaternion = cameraAdmin.cameraQuaternion;
-    var cameraVelocity = new CANNON.Vec3(0, 0, 0);;
+    var cameraVelocity = new CANNON.Vec3(0, 0, 0);
 
     // Define movement vectors relative to the camera's orientation
-    const forward = new THREE.Vector3(0, 0, -10).applyQuaternion(cameraQuaternion);
-    const backward = new THREE.Vector3(0, 0, 10).applyQuaternion(cameraQuaternion);
-    const right = new THREE.Vector3(10, 0, 0).applyQuaternion(cameraQuaternion);
-    const left = new THREE.Vector3(-10, 0, 0).applyQuaternion(cameraQuaternion);
+    const forward = new THREE.Vector3(0, 0, -cameraMovementSpeed).applyQuaternion(cameraQuaternion);
+    const backward = new THREE.Vector3(0, 0, cameraMovementSpeed).applyQuaternion(cameraQuaternion);
+    const right = new THREE.Vector3(cameraMovementSpeed, 0, 0).applyQuaternion(cameraQuaternion);
+    const left = new THREE.Vector3(-cameraMovementSpeed, 0, 0).applyQuaternion(cameraQuaternion);
   
     // Update camera position based on ASWD key presses
     if (movementKeys.a) cameraVelocity.copy(left.clone());

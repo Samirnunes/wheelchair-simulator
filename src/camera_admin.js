@@ -7,6 +7,7 @@ export class CameraAdmin{
         this.cameraInitialPosition = new THREE.Vector3(0, 2, 0);
         this.cameraInitialRotation = new THREE.Vector3(0, 0, 0);
         this.cameraQuaternion = new THREE.Quaternion();
+        this.cameraMovementSpeed = 10;
         this.camera.position.set(this.cameraInitialPosition.x, this.cameraInitialPosition.y, this.cameraInitialPosition.z);
         this.camera.rotation.set(this.cameraInitialRotation.x, this.cameraInitialRotation.y, this.cameraInitialRotation.z);
         this.cameraSensitivity = 0.04;
@@ -21,7 +22,6 @@ export class CameraAdmin{
 
     addToScene(scene, world){
         scene.add(this.camera);
-        //this.cameraMesh.add(this.camera);
         scene.add(this.cameraMesh);
         world.addBody(this.cameraBody);
     }
