@@ -36,6 +36,8 @@ export function translateCamera(cameraAdmin, gravity){
 
     // Set the camera's new position
     cameraAdmin.camera.position.copy(cameraPosition);
+    cameraAdmin.cameraBody.position.copy(cameraPosition);
+    cameraAdmin.cameraMesh.position.copy(cameraPosition);
 }
 
 export function rotateCamera(cameraAdmin, sizes){
@@ -69,4 +71,6 @@ export function rotateCamera(cameraAdmin, sizes){
     cameraAdmin.camera.rotation.set(0, 0, 0); // Reset the rotation
     cameraAdmin.camera.rotateOnAxis(new THREE.Vector3(0, 1, 0), cameraRotation.y);
     cameraAdmin.camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), cameraRotation.x);
+    cameraAdmin.cameraBody.quaternion.copy(cameraQuaternion);
+    cameraAdmin.cameraMesh.quaternion.copy(cameraQuaternion);
 }

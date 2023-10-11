@@ -7,7 +7,7 @@ export function addTestBox(myScene, myWorld){
         mass: 10,
         shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)),
     });
-    boxBody.position.set(90, 2, 100);
+    boxBody.position.set(90, 2, 120);
     myWorld.addBody(boxBody);
     const boxGeometry = new THREE.BoxGeometry(2, 2, 2);
     const boxMaterial = new THREE.MeshNormalMaterial();

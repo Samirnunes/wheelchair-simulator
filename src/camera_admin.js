@@ -28,7 +28,7 @@ export class CameraAdmin{
 
     #configureBody(){
         this.cameraBody = new CANNON.Body({
-            mass: 10,
+            mass: 0,
             shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)),
         });
         this.cameraBody.position.copy(this.camera.position);
