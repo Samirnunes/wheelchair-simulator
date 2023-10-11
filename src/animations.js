@@ -10,32 +10,25 @@ export function moveCityBodies(meshBodyPairs){
     }
 }
 
-export function translateCamera(cameraAdmin, gravity){
+export function translateCamera(cameraAdmin){
     const movementKeys = cameraAdmin.movementKeys;
     var cameraQuaternion = cameraAdmin.cameraQuaternion;
-    var cameraPosition = cameraAdmin.cameraInitialPosition;
-    const cameraSpeed = cameraAdmin.cameraSpeed;
-    const initialY = cameraPosition.y;
+    var cameraVelocity = new CANNON.Vec3(0, 0, 0);;
 
     // Define movement vectors relative to the camera's orientation
-    const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(cameraQuaternion);
-    const right = new THREE.Vector3(1, 0, 0).applyQuaternion(cameraQuaternion);
+    const forward = new THREE.Vector3(0, 0, -10).applyQuaternion(cameraQuaternion);
+    const backward = new THREE.Vector3(0, 0, 10).applyQuaternion(cameraQuaternion);
+    const right = new THREE.Vector3(10, 0, 0).applyQuaternion(cameraQuaternion);
+    const left = new THREE.Vector3(-10, 0, 0).applyQuaternion(cameraQuaternion);
   
     // Update camera position based on ASWD key presses
-    if (movementKeys.a) cameraPosition.sub(right.clone().multiplyScalar(cameraSpeed));
-    if (movementKeys.d) cameraPosition.add(right.clone().multiplyScalar(cameraSpeed));
-    if (movementKeys.s) cameraPosition.sub(forward.clone().multiplyScalar(cameraSpeed));
-    if (movementKeys.w) cameraPosition.add(forward.clone().multiplyScalar(cameraSpeed));
-
-    //if (gravity) {
-    //    cameraPosition.sub(gravity);
-    //}
-
-    // Restore the initial Y position
-    //cameraPosition.y = initialY;
+    if (movementKeys.a) cameraVelocity.copy(left.clone());
+    if (movementKeys.d) cameraVelocity.copy(right.clone());
+    if (movementKeys.s) cameraVelocity.copy(backward.clone());
+    if (movementKeys.w) cameraVelocity.copy(forward.clone());
 
     // Set the camera's new position
-    cameraAdmin.cameraBody.position.copy(cameraPosition);
+    cameraAdmin.cameraBody.velocity.copy(cameraVelocity);
 }
 
 export function rotateCamera(cameraAdmin, sizes){

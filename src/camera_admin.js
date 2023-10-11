@@ -9,7 +9,6 @@ export class CameraAdmin{
         this.cameraQuaternion = new THREE.Quaternion();
         this.camera.position.set(this.cameraInitialPosition.x, this.cameraInitialPosition.y, this.cameraInitialPosition.z);
         this.camera.rotation.set(this.cameraInitialRotation.x, this.cameraInitialRotation.y, this.cameraInitialRotation.z);
-        this.cameraSpeed = 0.3;
         this.cameraSensitivity = 0.04;
         this.mouse = new THREE.Vector2();
         this.previousMouse = new THREE.Vector2();
@@ -29,7 +28,7 @@ export class CameraAdmin{
 
     #configureBody(){
         this.cameraBody = new CANNON.Body({
-            mass: 5,
+            mass: 10,
             shape: new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5)),
         });
         this.cameraBody.position.copy(this.camera.position);
