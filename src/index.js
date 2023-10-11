@@ -18,7 +18,7 @@ const myWorld = new CANNON.World();
 myWorld.broadphase = new CANNON.NaiveBroadphase();
 myWorld.solver.iterations = 10;
 myWorld.broadphase.useBoundingBoxes = true;
-const yGravity = -9.81;
+const yGravity = 0;
 myWorld.gravity.set(0, yGravity, 0);
 
 const cannonDebugger = new CannonDebugger(myScene, myWorld)
@@ -46,9 +46,8 @@ function animate() {
     boxMesh.quaternion.copy(boxBody.quaternion);
     
     cameraAdmin.camera.position.copy(cameraAdmin.cameraBody.position);
-    cameraAdmin.camera.quaternion.copy(cameraAdmin.cameraBody.quaternion);
     cameraAdmin.cameraMesh.position.copy(cameraAdmin.cameraBody.position);
-    cameraAdmin.cameraMesh.quaternion.copy(cameraAdmin.cameraBody.quaternion);
+    cameraAdmin.cameraMesh.quaternion.copy(cameraAdmin.camera.quaternion);
 
     myWorld.step(1/60);
     cannonDebugger.update() 

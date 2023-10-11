@@ -4,7 +4,7 @@ import * as CANNON from "../node_modules/cannon-es/dist/cannon-es.js"
 export class CameraAdmin{
     constructor(sizes){
         this.camera = new THREE.PerspectiveCamera(80, sizes.width/sizes.height, 0.1, 10000)
-        this.cameraInitialPosition = new THREE.Vector3(0, 2, 0);
+        this.cameraInitialPosition = new THREE.Vector3(90, 2, 110);
         this.cameraInitialRotation = new THREE.Vector3(0, 0, 0);
         this.cameraQuaternion = new THREE.Quaternion();
         this.cameraMovementSpeed = 10;
@@ -28,8 +28,8 @@ export class CameraAdmin{
 
     #configureBody(){
         this.cameraBody = new CANNON.Body({
-            mass: 10,
-            shape: new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5)),
+            mass: 70,
+            shape: new CANNON.Box(new CANNON.Vec3(0.5, 1, 0.5)),
         });
         this.cameraBody.position.copy(this.camera.position);
     }

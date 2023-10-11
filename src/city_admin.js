@@ -6,7 +6,7 @@ import {GLTFLoader} from "../node_modules/three/examples/jsm/loaders/GLTFLoader.
 export class CityAdmin{
     constructor(){
         this.loader = new GLTFLoader()
-        this.city_path = "../assets/city2/city.glb"
+        this.city_path = "../assets/city1/city.glb"
         this.meshBodyPairs = [];
     }
 
