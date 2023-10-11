@@ -41,7 +41,6 @@ function animate() {
     
     boxMesh.position.copy(boxBody.position);
     boxMesh.quaternion.copy(boxBody.quaternion);
-    console.log(boxMesh.position)
     
     myWorld.step(1/60);
     cannonDebugger.update() 

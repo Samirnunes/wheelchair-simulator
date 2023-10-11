@@ -43,7 +43,6 @@ export class CityAdmin{
         body.position.copy(mesh.position);
         body.quaternion.copy(mesh.quaternion);
         body.addShape(shape, offset, quaternion);
-        console.log(shape);
 
         return body
     }
