@@ -31,7 +31,6 @@ var rendererAdmin = new RendererAdmin(canvas, sizes);
 cityAdmin.addToScene(myScene, myWorld);
 lightAdmin.addToScene(myScene);
 cameraAdmin.addToScene(myScene, myWorld);
-const {boxMesh, boxBody} = TEST.addTestBox(myScene, myWorld);
 
 var meshBodyPairs = cityAdmin.getMeshBodyPairs();
 
@@ -41,10 +40,7 @@ function animate() {
     ANIMATIONS.translateCamera(cameraAdmin);
     ANIMATIONS.rotateCamera(cameraAdmin, sizes);
     ANIMATIONS.moveCityBodies(meshBodyPairs);
-    
-    boxMesh.position.copy(boxBody.position);
-    boxMesh.quaternion.copy(boxBody.quaternion);
-    
+
     cameraAdmin.camera.position.copy(cameraAdmin.cameraBody.position);
     cameraAdmin.cameraMesh.position.copy(cameraAdmin.cameraBody.position);
     cameraAdmin.cameraMesh.quaternion.copy(cameraAdmin.camera.quaternion);
