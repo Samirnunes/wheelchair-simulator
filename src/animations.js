@@ -1,6 +1,5 @@
 import * as THREE from "../node_modules/three/build/three.module.js"
 import * as CANNON from "../node_modules/cannon-es/dist/cannon-es.js"
-import { threeToCannon } from "three-to-cannon";
 
 export function moveCityBodies(meshBodyPairs){
     for(var pair of meshBodyPairs){
