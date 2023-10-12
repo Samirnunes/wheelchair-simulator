@@ -30,6 +30,7 @@ export class CameraAdmin{
         this.cameraBody = new CANNON.Body({
             mass: 70,
             shape: new CANNON.Box(new CANNON.Vec3(0.5, 1, 0.5)),
+            linearDamping: 0.1,
         });
         this.cameraBody.position.copy(this.camera.position);
     }
