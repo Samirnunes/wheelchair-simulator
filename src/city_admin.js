@@ -14,6 +14,8 @@ export class CityAdmin{
         this.loader.load(this.city_path, glb => {
             glb.scene.traverse(mesh => {
                 if (mesh instanceof THREE.Mesh) {
+                    mesh.receiveShadow = true;
+                    mesh.castShadow = true;
                     this.#modifyMaterial(mesh);
                     const body = this.#getBody(mesh);
                     world.addBody(body);
