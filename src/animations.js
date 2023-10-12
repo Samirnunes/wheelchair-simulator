@@ -24,8 +24,6 @@ export function translateCamera(cameraAdmin){
     const left = new THREE.Vector3(-1, 0, 0).applyQuaternion(cameraQuaternion);
 
     // Update camera position based on ASWD key presses
-    if (movementKeys.a) cameraVelocity.copy(left.clone().multiplyScalar(cameraMovementSpeed));
-    if (movementKeys.d) cameraVelocity.copy(right.clone().multiplyScalar(cameraMovementSpeed));
     if (movementKeys.s) {
         backward.y = 0;
         backward.normalize();
