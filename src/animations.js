@@ -15,32 +15,42 @@ export function translateCamera(cameraAdmin){
     const movementKeys = cameraAdmin.movementKeys;
     const cameraMovementSpeed = cameraAdmin.cameraMovementSpeed;
     var cameraQuaternion = cameraAdmin.cameraQuaternion;
-    var cameraVelocity = new CANNON.Vec3(0, 0, 0);
 
     // Define movement vectors relative to the camera's orientation
     const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(cameraQuaternion);
     const backward = new THREE.Vector3(0, 0, 1).applyQuaternion(cameraQuaternion);
-    const right = new THREE.Vector3(1, 0, 0).applyQuaternion(cameraQuaternion);
-    const left = new THREE.Vector3(-1, 0, 0).applyQuaternion(cameraQuaternion);
+    const impulseForce = new CANNON.Vec3(0, 0, 0);
 
     // Update camera position based on ASWD key presses
-    if (movementKeys.s) {
+    if (movementKeys.s && !cameraAdmin.sKeyPressed) {
+        cameraAdmin.cameraBody.velocity.copy(new CANNON.Vec3(0, 0, 0));
         backward.y = 0;
         backward.normalize();
-        cameraVelocity.copy(backward.clone().multiplyScalar(cameraMovementSpeed));
+        const backwardImpulse = backward.multiplyScalar(cameraMovementSpeed);
+        impulseForce.vadd(backwardImpulse, impulseForce);
+        cameraAdmin.sKeyPressed = true;
     }
-    if (movementKeys.w) {
+    if (movementKeys.w && !cameraAdmin.wKeyPressed) {
         // Project the forward movement onto the XZ plane
+        cameraAdmin.cameraBody.velocity.copy(new CANNON.Vec3(0, 0, 0));
         forward.y = 0;
         forward.normalize();
-        cameraVelocity.copy(forward.clone().multiplyScalar(cameraMovementSpeed));
+        const forwardImpulse = forward.multiplyScalar(cameraMovementSpeed);
+        impulseForce.vadd(forwardImpulse, impulseForce);
+        cameraAdmin.wKeyPressed = true;
     }
 
-    const gravity = -2
-    cameraVelocity.y = cameraVelocity.y + gravity
+    if(!movementKeys.s){
+        cameraAdmin.sKeyPressed = false;
+    }
 
-    // Set the camera's new position
-    cameraAdmin.cameraBody.velocity.copy(cameraVelocity);
+    if (!movementKeys.w) {
+        cameraAdmin.wKeyPressed = false;
+    }
+
+    const cameraGravity = -1
+    cameraAdmin.cameraBody.velocity.vadd(cameraAdmin.cameraBody.velocity, new CANNON.Vec3(0, cameraGravity, 0));
+    cameraAdmin.cameraBody.applyImpulse(impulseForce, new CANNON.Vec3(0, 0, 0));
 }
 
 export function rotateCamera(cameraAdmin, sizes){
@@ -76,5 +86,4 @@ export function rotateCamera(cameraAdmin, sizes){
     cameraAdmin.camera.rotateOnAxis(new THREE.Vector3(0, 1, 0), cameraRotation.y);
     cameraAdmin.camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), cameraRotation.x);
     cameraAdmin.cameraBody.quaternion.copy(initialCameraQuaternion);
-    console.log(initialCameraQuaternion)
 }

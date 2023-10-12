@@ -7,13 +7,15 @@ export class CameraAdmin{
         this.cameraInitialPosition = new THREE.Vector3(90, 2, 110);
         this.cameraInitialRotation = new THREE.Vector3(0, 0, 0);
         this.cameraQuaternion = new THREE.Quaternion();
-        this.cameraMovementSpeed = 10;
+        this.cameraMovementSpeed = 500;
         this.camera.position.set(this.cameraInitialPosition.x, this.cameraInitialPosition.y, this.cameraInitialPosition.z);
         this.camera.rotation.set(this.cameraInitialRotation.x, this.cameraInitialRotation.y, this.cameraInitialRotation.z);
         this.cameraSensitivity = 0.04;
         this.mouse = new THREE.Vector2();
         this.previousMouse = new THREE.Vector2();
         this.movementKeys = { a: false, s: false, w: false, d: false };
+        this.wKeyPressed = false;
+        this.sKeyPressed = false;
 
         this.#configureBody()
         this.#configureMesh()
@@ -30,7 +32,7 @@ export class CameraAdmin{
         this.cameraBody = new CANNON.Body({
             mass: 70,
             shape: new CANNON.Box(new CANNON.Vec3(0.5, 1, 0.5)),
-            linearDamping: 0.1,
+            linearDamping: 0.3,
         });
         this.cameraBody.position.copy(this.camera.position);
     }
