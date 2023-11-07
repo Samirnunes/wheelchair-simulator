@@ -2,7 +2,7 @@ import * as THREE from "../node_modules/three/build/three.module.js"
 import * as CANNON from "../node_modules/cannon-es/dist/cannon-es.js"
 import { Admin } from "./admin.js";
 import { threeToCannon, ShapeType } from '../node_modules/three-to-cannon';
-import {GLTFLoader} from "../node_modules/three/examples/jsm/loaders/GLTFLoader.js"
+import { GLTFLoader } from "../node_modules/three/examples/jsm/loaders/GLTFLoader.js"
 
 export class CityAdmin extends Admin{
     constructor(scene, world){
