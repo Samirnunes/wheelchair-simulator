@@ -1,53 +1,33 @@
-import * as THREE from "../node_modules/three/build/three.module.js"
-import * as CANNON from "../node_modules/cannon-es/dist/cannon-es.js"
-import * as ANIMATIONS from "./animations.js"
-import * as TEST from "./test_utils.js"
-import {CityAdmin} from "./city_admin.js"
-import {LightAdmin} from "./light_admin.js"
-import {CameraAdmin} from "./camera_admin.js"
-import {RendererAdmin} from "./renderer_admin.js"
-import CannonDebugger from '../node_modules/cannon-es-debugger/dist/cannon-es-debugger.js'
+import { WorldBuilder } from "./world_builder.js"
+import { CityAdmin } from "./city_admin.js"
+import { LightAdmin } from "./light_admin.js"
+import { CameraAdmin } from "./camera_admin.js"
 
-const canvas = document.querySelector('.webgl')
-const myScene = new THREE.Scene()
-const sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight
-}
-const myWorld = new CANNON.World();
-myWorld.broadphase = new CANNON.NaiveBroadphase();
-myWorld.solver.iterations = 10;
-myWorld.broadphase.useBoundingBoxes = true;
-const yGravity = 0;
-myWorld.gravity.set(0, yGravity, 0);
+const worldBuilder = new WorldBuilder()
+const scene = worldBuilder.getScene()
+const sizes = worldBuilder.getSizes()
+const world = worldBuilder.getWorld()
+const cannonDebugger = worldBuilder.getDebugger()
+const renderer = worldBuilder.getRenderer()
 
-const cannonDebugger = new CannonDebugger(myScene, myWorld)
+var cityAdmin = new CityAdmin(scene, world);
+var lightAdmin = new LightAdmin(scene, world);
+var cameraAdmin = new CameraAdmin(scene, world, sizes);
 
-var cityAdmin = new CityAdmin();
-var lightAdmin = new LightAdmin();
-var cameraAdmin = new CameraAdmin(sizes);
-var rendererAdmin = new RendererAdmin(canvas, sizes);
-
-cityAdmin.addToScene(myScene, myWorld);
-lightAdmin.addToScene(myScene);
-cameraAdmin.addToScene(myScene, myWorld);
-
-var meshBodyPairs = cityAdmin.getMeshBodyPairs();
+cityAdmin.addToScene();
+lightAdmin.addToScene();
+cameraAdmin.addToScene();
 
 function animate() {
     requestAnimationFrame(animate);
     
-    ANIMATIONS.translateCamera(cameraAdmin);
-    ANIMATIONS.rotateCamera(cameraAdmin, sizes);
-    ANIMATIONS.moveCityBodies(meshBodyPairs);
+    cameraAdmin.translateCamera();
+    cameraAdmin.rotateCamera();
+    cameraAdmin.overlapCamera();
 
-    cameraAdmin.camera.position.copy(cameraAdmin.cameraBody.position);
-    cameraAdmin.cameraMesh.position.copy(cameraAdmin.cameraBody.position);
-    cameraAdmin.cameraMesh.quaternion.copy(cameraAdmin.camera.quaternion);
-
-    myWorld.step(1/60);
+    world.step(1/60);
     cannonDebugger.update() 
-    rendererAdmin.renderer.render(myScene, cameraAdmin.camera);
+    renderer.render(scene, cameraAdmin.camera);
 }
 
 animate()

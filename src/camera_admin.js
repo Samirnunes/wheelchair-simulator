@@ -1,9 +1,108 @@
 import * as THREE from "../node_modules/three/build/three.module.js"
 import * as CANNON from "../node_modules/cannon-es/dist/cannon-es.js"
+import { Admin } from "./admin.js";
 
-export class CameraAdmin{
-    constructor(sizes){
-        this.camera = new THREE.PerspectiveCamera(80, sizes.width/sizes.height, 0.1, 10000)
+export class CameraAdmin extends Admin{
+    constructor(scene, world, sizes){
+        super(scene, world);
+        this.sizes = sizes;
+        this.#configureCamera()
+        this.#configureBody()
+        this.#configureMesh()
+        this.#addEventListeners()
+    }
+
+    addToScene(){
+        this.scene.add(this.camera);
+        this.scene.add(this.cameraMesh);
+        this.world.addBody(this.cameraBody);
+    }
+
+    translateCamera(){
+        const movementKeys = this.movementKeys;
+        const cameraMovementSpeed = this.cameraMovementSpeed;
+        var cameraQuaternion = this.cameraQuaternion;
+    
+        // Define movement vectors relative to the camera's orientation
+        const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(cameraQuaternion);
+        const backward = new THREE.Vector3(0, 0, 1).applyQuaternion(cameraQuaternion);
+        const impulseForce = new CANNON.Vec3(0, 0, 0);
+    
+        // Update camera position based on ASWD key presses
+        if (movementKeys.s && !this.sKeyPressed) {
+            this.cameraBody.velocity.copy(new CANNON.Vec3(0, 0, 0));
+            backward.y = 0;
+            backward.normalize();
+            const backwardImpulse = backward.multiplyScalar(cameraMovementSpeed);
+            impulseForce.vadd(backwardImpulse, impulseForce);
+            this.sKeyPressed = true;
+        }
+        if (movementKeys.w && !this.wKeyPressed) {
+            // Project the forward movement onto the XZ plane
+            this.cameraBody.velocity.copy(new CANNON.Vec3(0, 0, 0));
+            forward.y = 0;
+            forward.normalize();
+            const forwardImpulse = forward.multiplyScalar(cameraMovementSpeed);
+            impulseForce.vadd(forwardImpulse, impulseForce);
+            this.wKeyPressed = true;
+        }
+    
+        if(!movementKeys.s){
+            this.sKeyPressed = false;
+        }
+    
+        if (!movementKeys.w) {
+            this.wKeyPressed = false;
+        }
+    
+        const cameraGravity = -1
+        this.cameraBody.velocity.vadd(this.cameraBody.velocity, new CANNON.Vec3(0, cameraGravity, 0));
+        this.cameraBody.applyImpulse(impulseForce, new CANNON.Vec3(0, 0, 0));
+    }
+
+    rotateCamera(){
+        var mouse = this.mouse;
+        const previousMouse = this.previousMouse;
+        var cameraRotation = this.cameraInitialRotation;
+        var cameraQuaternion = this.cameraQuaternion;
+        const initialCameraQuaternion = new THREE.Quaternion();
+        const cameraSensitivity = this.cameraSensitivity;
+    
+        // Calculate the change in mouse position
+        const delta = new THREE.Vector2().subVectors(mouse, previousMouse);
+    
+        // Determine which axis to rotate based on the mouse movement
+        if (Math.abs(delta.x) > Math.abs(delta.y) & Math.abs(mouse.x) * this.sizes.width > 0.5 * this.sizes.width/2) {
+            // Update camera rotation based on horizontal mouse movement (around Y-axis)
+            cameraRotation.y -= delta.x * cameraSensitivity;
+        } else if(Math.abs(delta.x) <= Math.abs(delta.y) & Math.abs(mouse.y) * this.sizes.height > 0.5 * this.sizes.height/2){
+            // Update camera rotation based on vertical mouse movement (around X-axis)
+            cameraRotation.x += delta.y * cameraSensitivity;
+    
+            // Limit vertical rotation to prevent camera flipping
+            cameraRotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, cameraRotation.x));
+        }
+    
+        // Calculate the camera's quaternion
+        cameraQuaternion.setFromRotationMatrix(
+            new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(cameraRotation.x, cameraRotation.y, 0, 'YXZ'))
+        );
+    
+        // Set the camera's new rotation
+        this.camera.rotation.set(0, 0, 0); // Reset the rotation
+        this.camera.rotateOnAxis(new THREE.Vector3(0, 1, 0), cameraRotation.y);
+        this.camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), cameraRotation.x);
+        this.cameraBody.quaternion.copy(initialCameraQuaternion);
+    }
+
+    overlapCamera(){
+        this.camera.position.copy(this.cameraBody.position);
+        this.cameraMesh.position.copy(this.cameraBody.position);
+        this.cameraMesh.quaternion.copy(this.camera.quaternion);
+    }
+
+    #configureCamera(){
+        this.camera = new THREE.PerspectiveCamera(80, this.sizes.width/this.sizes.height, 0.1, 10000)
         this.cameraInitialPosition = new THREE.Vector3(90, 2, 110);
         this.cameraInitialRotation = new THREE.Vector3(0, 0, 0);
         this.cameraQuaternion = new THREE.Quaternion();
@@ -16,16 +115,6 @@ export class CameraAdmin{
         this.movementKeys = { a: false, s: false, w: false, d: false };
         this.wKeyPressed = false;
         this.sKeyPressed = false;
-
-        this.#configureBody()
-        this.#configureMesh()
-        this.#addEventListeners()
-    }
-
-    addToScene(scene, world){
-        scene.add(this.camera);
-        scene.add(this.cameraMesh);
-        world.addBody(this.cameraBody);
     }
 
     #configureBody(){
