@@ -1,21 +1,23 @@
 import * as THREE from "../node_modules/three/build/three.module.js"
 import * as CANNON from "../node_modules/cannon-es/dist/cannon-es.js"
 import { Admin } from "./admin.js";
+import { GLTFLoader } from "../node_modules/three/examples/jsm/loaders/GLTFLoader.js"
 
 export class CameraAdmin extends Admin{
     constructor(scene, world, sizes){
         super(scene, world);
         this.sizes = sizes;
-        this.#configureCamera()
-        this.#configureBody()
-        this.#configureMesh()
-        this.#addEventListeners()
+        this.#configureCamera();
+        this.#configureBody();
+        this.#configureMesh();
+        this.#addEventListeners();
+        console.log(this.cameraMesh)
     }
 
     addToScene(){
         this.scene.add(this.camera);
-        this.scene.add(this.cameraMesh);
         this.world.addBody(this.cameraBody);
+        this.scene.add(this.cameraMesh);
     }
 
     translateCamera(){
@@ -80,7 +82,7 @@ export class CameraAdmin extends Admin{
             cameraRotation.x += delta.y * cameraSensitivity;
     
             // Limit vertical rotation to prevent camera flipping
-            cameraRotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, cameraRotation.x));
+            cameraRotation.x = Math.max(-Math.PI / 6, Math.min(Math.PI / 6, cameraRotation.x));
         }
     
         // Calculate the camera's quaternion
@@ -97,11 +99,19 @@ export class CameraAdmin extends Admin{
 
     overlapCamera(){
         this.camera.position.copy(this.cameraBody.position);
-        this.camera.position.y += 2; // To see the wheelchair
+        // To see the wheelchair
+        this.camera.position.y += 1.7;
+        
         this.cameraMesh.position.copy(this.cameraBody.position);
         this.cameraMesh.quaternion.copy(this.camera.quaternion);
-        this.cameraMesh.quaternion.x = 0; // To avoid rotations in xz plane.
+        // To avoid rotations in xz plane
+        this.cameraMesh.quaternion.x = 0; 
         this.cameraMesh.quaternion.z = 0;
+        // Adjust mesh rotation
+        const angleInRadians = Math.PI; // 180 degrees in radians
+        const axis = new THREE.Vector3(0, 1, 0); // y-axis
+        const additionalRotation = new THREE.Quaternion().setFromAxisAngle(axis, angleInRadians);
+        this.cameraMesh.quaternion.multiply(additionalRotation)
     }
 
     #configureCamera(){
@@ -123,17 +133,19 @@ export class CameraAdmin extends Admin{
     #configureBody(){
         this.cameraBody = new CANNON.Body({
             mass: 70,
-            shape: new CANNON.Box(new CANNON.Vec3(0.5, 1, 0.5)),
+            shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)),
             linearDamping: 0.3,
         });
         this.cameraBody.position.copy(this.camera.position);
     }
 
     #configureMesh(){
-        const cameraGeometry = new THREE.BoxGeometry(2, 2, 2);
-        const cameraMaterial = new THREE.MeshNormalMaterial();
-        this.cameraMesh = new THREE.Mesh(cameraGeometry, cameraMaterial);
-        this.cameraMesh.position.copy(this.cameraBody.position)
+        this.loader = new GLTFLoader();
+        this.mesh_path = "../assets/wheelchair/wheelchair.glb";
+        this.loader.load(this.mesh_path, glb => {
+            this.scene.add(glb.scene)
+            this.cameraMesh = glb.scene.children[0]
+        })
     }
 
     #addEventListeners(){

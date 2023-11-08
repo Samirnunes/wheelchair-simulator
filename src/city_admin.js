@@ -8,12 +8,11 @@ export class CityAdmin extends Admin{
     constructor(scene, world){
         super(scene, world);
         this.meshBodyPairs = [];
-        this.#configureLoader()
-        this.#configureCityPath()
+        this.#configureMesh();
     }
 
     addToScene() {
-        this.loader.load(this.city_path, glb => {
+        this.loader.load(this.mesh_path, glb => {
             glb.scene.traverse(mesh => {
                 if (mesh instanceof THREE.Mesh) {
                     mesh.receiveShadow = true;
@@ -37,12 +36,9 @@ export class CityAdmin extends Admin{
         }
     }
 
-    #configureLoader(){
+    #configureMesh(){
         this.loader = new GLTFLoader();
-    }
-
-    #configureCityPath(){
-        this.city_path = "../assets/city1/city.glb";
+        this.mesh_path = "../assets/city/city.glb";
     }
 
     #modifyMaterial(mesh){
