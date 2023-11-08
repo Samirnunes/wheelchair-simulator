@@ -97,8 +97,11 @@ export class CameraAdmin extends Admin{
 
     overlapCamera(){
         this.camera.position.copy(this.cameraBody.position);
+        this.camera.position.y += 2; // To see the wheelchair
         this.cameraMesh.position.copy(this.cameraBody.position);
         this.cameraMesh.quaternion.copy(this.camera.quaternion);
+        this.cameraMesh.quaternion.x = 0; // To avoid rotations in xz plane.
+        this.cameraMesh.quaternion.z = 0;
     }
 
     #configureCamera(){
