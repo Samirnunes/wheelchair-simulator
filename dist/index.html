@@ -3,8 +3,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wheelchair Simulation</title>
+    <style>
+    body {
+        margin: 0px;
+        overflow: hidden;
+    }
+    .text {
+        position: absolute;
+        width: 300px; 
+        height: 200px; 
+        border: 2px solid black;
+        background-color: lightblue;
+        padding: 20px;
+        font-family: Arial;
+        font-weight: bold;
+        font-size: 1rem;
+        float: left;
+    }
+    </style>
 </head>
 <body>
+    <div id = "text" class = "text">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer  
+        malesuada tempor mi at malesuada. Sed at malesuada ante, id malesuada  
+        nisi. Integer euismod commodo sem, eu commodo mauris placerat id
+    </div>
     <canvas class = "webgl"></canvas>
     <script type="module" src="bundle.js"></script>
 </body>
