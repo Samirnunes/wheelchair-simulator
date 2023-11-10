@@ -62,6 +62,8 @@ export class WorldBuilder{
         this.#world = new CANNON.World();
         this.#world.broadphase = new CANNON.NaiveBroadphase();
         this.#world.solver.iterations = 10;
+        this.#world.defaultContactMaterial.contactEquationStiffness = 1e10
+        this.#world.defaultContactMaterial.contactEquationRelaxation = 10
         this.#world.broadphase.useBoundingBoxes = true;
         const yGravity = 0;
         this.#world.gravity.set(0, yGravity, 0);
