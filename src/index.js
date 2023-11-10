@@ -2,6 +2,7 @@ import { WorldBuilder } from "./world_builder.js"
 import { CityAdmin } from "./city_admin.js"
 import { LightAdmin } from "./light_admin.js"
 import { CameraAdmin } from "./camera_admin.js"
+import { TextAdmin } from "./text_admin.js"
 
 const worldBuilder = new WorldBuilder()
 const scene = worldBuilder.getScene()
@@ -13,14 +14,19 @@ const renderer = worldBuilder.getRenderer()
 var cityAdmin = new CityAdmin(scene, world);
 var lightAdmin = new LightAdmin(scene, world);
 var cameraAdmin = new CameraAdmin(scene, world, sizes);
+var textAdmin = new TextAdmin(scene, world);
 
 cityAdmin.addToScene();
 lightAdmin.addToScene();
 cameraAdmin.addToScene();
 
+textAdmin.modifyText("Esse é o nosso texto. Podemos escondê-lo (hideText) e mostrá-lo (showText) também!");
+textAdmin.hideText();
+textAdmin.showText();
+
 function animate() {
     requestAnimationFrame(animate);
-    
+
     cameraAdmin.translateCamera();
     cameraAdmin.rotateCamera();
     cameraAdmin.overlapCamera();
