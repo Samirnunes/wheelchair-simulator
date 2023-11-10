@@ -132,7 +132,7 @@ export class CameraAdmin extends Admin{
     #configureBody(){
         this.cameraBody = new CANNON.Body({
             mass: 70,
-            shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)),
+            shape: new CANNON.Box(new CANNON.Vec3(0.8, 0.8, 0.8)),
             linearDamping: 0.3,
         });
         this.cameraBody.position.copy(this.camera.position);
