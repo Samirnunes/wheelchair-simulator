@@ -11,7 +11,6 @@ export class CameraAdmin extends Admin{
         this.#configureBody();
         this.#configureMesh();
         this.#addEventListeners();
-        console.log(this.cameraMesh)
     }
 
     addToScene(){
