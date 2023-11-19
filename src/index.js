@@ -11,10 +11,10 @@ const world = worldBuilder.getWorld()
 const cannonDebugger = worldBuilder.getDebugger()
 const renderer = worldBuilder.getRenderer()
 
-var cityAdmin = new CityAdmin(scene, world);
-var lightAdmin = new LightAdmin(scene, world);
-var cameraAdmin = new CameraAdmin(scene, world, sizes);
-var textAdmin = new TextAdmin(scene, world);
+const cityAdmin = new CityAdmin(scene, world);
+const lightAdmin = new LightAdmin(scene, world);
+const cameraAdmin = new CameraAdmin(scene, world, sizes);
+const textAdmin = new TextAdmin(scene, world);
 
 cityAdmin.addToScene();
 lightAdmin.addToScene();
