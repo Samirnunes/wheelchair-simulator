@@ -34,7 +34,8 @@ export class CameraAdmin extends Admin{
             this.cameraBody.velocity.copy(new CANNON.Vec3(0, 0, 0));
             backward.y = 0;
             backward.normalize();
-            const backwardImpulse = backward.multiplyScalar(cameraMovementSpeed);
+            let speed = Math.sqrt(Math.pow(this.camera.velocity.x,2) + Math.pow(this.camera.velocity.z,2)) ;
+            const backwardImpulse = backward.multiplyScalar(speed);
             impulseForce.vadd(backwardImpulse, impulseForce);
             this.sKeyPressed = true;
         }
@@ -56,8 +57,9 @@ export class CameraAdmin extends Admin{
             this.wKeyPressed = false;
         }
     
-        const cameraGravity = -1
-        this.cameraBody.velocity.vadd(this.cameraBody.velocity, new CANNON.Vec3(0, cameraGravity, 0));
+        const cameraGravity = -30
+        
+        impulseForce.y += cameraGravity;
         this.cameraBody.applyImpulse(impulseForce, new CANNON.Vec3(0, 0, 0));
     }
 
@@ -115,10 +117,10 @@ export class CameraAdmin extends Admin{
 
     #configureCamera(){
         this.camera = new THREE.PerspectiveCamera(80, this.sizes.width/this.sizes.height, 0.1, 10000)
-        this.cameraInitialPosition = new THREE.Vector3(90, 2, 110);
+        this.cameraInitialPosition = new THREE.Vector3(-25, 5, -40);
         this.cameraInitialRotation = new THREE.Vector3(0, 0, 0);
         this.cameraQuaternion = new THREE.Quaternion();
-        this.cameraMovementSpeed = 500;
+        this.cameraMovementSpeed = 1000;
         this.camera.position.set(this.cameraInitialPosition.x, this.cameraInitialPosition.y, this.cameraInitialPosition.z);
         this.camera.rotation.set(this.cameraInitialRotation.x, this.cameraInitialRotation.y, this.cameraInitialRotation.z);
         this.cameraSensitivity = 0.04;
@@ -131,9 +133,10 @@ export class CameraAdmin extends Admin{
 
     #configureBody(){
         this.cameraBody = new CANNON.Body({
-            mass: 70,
-            shape: new CANNON.Box(new CANNON.Vec3(0.8, 0.8, 0.8)),
+            mass: 100,
+            shape: new CANNON.Box(new CANNON.Vec3(0.8, 0.8, 0.8)), // Possibly change to sphere
             linearDamping: 0.3,
+            restitution: 0.2,
         });
         this.cameraBody.position.copy(this.camera.position);
     }

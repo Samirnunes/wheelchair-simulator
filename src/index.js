@@ -31,6 +31,8 @@ function animate() {
     cameraAdmin.rotateCamera();
     cameraAdmin.overlapCamera();
 
+    console.log(cameraAdmin.camera.position)
+
     world.step(1/60);
     cannonDebugger.update() 
     renderer.render(scene, cameraAdmin.camera);
