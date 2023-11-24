@@ -117,7 +117,7 @@ export class CameraAdmin extends Admin{
 
     #configureCamera(){
         this.camera = new THREE.PerspectiveCamera(80, this.sizes.width/this.sizes.height, 0.1, 10000)
-        this.cameraInitialPosition = new THREE.Vector3(-25, 5, -40);
+        this.cameraInitialPosition = new THREE.Vector3(-25, 8, 0);
         this.cameraInitialRotation = new THREE.Vector3(0, 0, 0);
         this.cameraQuaternion = new THREE.Quaternion();
         this.cameraMovementSpeed = 1000;

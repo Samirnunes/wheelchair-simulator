@@ -38,7 +38,7 @@ export class CityAdmin extends Admin{
 
     #configureMesh(){
         this.loader = new GLTFLoader();
-        this.mesh_path = "../assets/city/city_telles_v09.glb";
+        this.mesh_path = "../assets/city/city.glb";
     }
 
     #modifyMaterial(mesh){
