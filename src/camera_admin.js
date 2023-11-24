@@ -61,6 +61,10 @@ export class CameraAdmin extends Admin{
         
         impulseForce.y += cameraGravity;
         this.cameraBody.applyImpulse(impulseForce, new CANNON.Vec3(0, 0, 0));
+
+        if(this.cameraBody.position.y < -5){
+            this.cameraBody.position = this.cameraInitialPosition;
+        }
     }
 
     rotateCamera(){
