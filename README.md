@@ -3,12 +3,12 @@ O código foi construído no editor de código-fonte Visual Studio Code (VSCode)
 
 A seguir, listam-se os nomes dos arquivos nos quais o código do projeto foi dividido e suas respectivas explicações:
 
-- index.html: Arquivo .html do projeto, necessário para rodar o código no navegador. Nele, são definidos atributos como o título da página no navegador, o texto inicial apresentado na tela e o bundler utilizado;
-- index.js: Arquivo .js principal. É o equivalente do arquivo main da linguagem C. No projeto, ele é o responsável por instanciar todos os objetos, adicioná-los à cena e realizar o loop de animação;
-- admin.js: Define a classe Admin, que serve de interface para a criação das outras classes, cada qual administra uma característica do projeto;
+- __index.html__: Arquivo .html do projeto, necessário para rodar o código no navegador. Nele, são definidos atributos como o título da página no navegador, o texto inicial apresentado na tela e o bundler utilizado;
+- __index.js__: Arquivo .js principal. É o equivalente do arquivo main da linguagem C. No projeto, ele é o responsável por instanciar todos os objetos, adicioná-los à cena e realizar o loop de animação;
+- __admin.js__: Define a classe Admin, que serve de interface para a criação das outras classes, cada qual administra uma característica do projeto;
 camera admin.js: Define a classe CameraAdmin, que administra todas as propriedades da câmera, incluindo a mesh do cadeirante, que está acoplada à câmera, sua movimentação e body para colisão;
-- city_admin.js: Define a classe CityAdmin, que administra todas as propriedades da cidade renderizada na cena, incluindo cada um de seus objetos, meshes e bodies para colisão;
-- light_admin.js: Define a classe LightAdmin, que administra a iluminação da cena;
-- text_admin.js: Define a classe TextAdmin, que possui métodos para administrar o texto mostrado na tela durante a animação;
-- world_builder.js: Define a classe WorldBuilder, que configura os objetos canvas, scene, sizes, world e renderer, os quais são necessários para a simulação funcionar. Também foi utilizada para definir o objeto cannonDebugger durante a fase de testes do projeto, para a visualização das bounding boxes;
--test_utils.js: Define métodos que foram úteis durante a fase de testes do simulador.
+- __city_admin.js__: Define a classe CityAdmin, que administra todas as propriedades da cidade renderizada na cena, incluindo cada um de seus objetos, meshes e bodies para colisão;
+- __light_admin.js__: Define a classe LightAdmin, que administra a iluminação da cena;
+- __text_admin.js__: Define a classe TextAdmin, que possui métodos para administrar o texto mostrado na tela durante a animação;
+- __world_builder.js__: Define a classe WorldBuilder, que configura os objetos canvas, scene, sizes, world e renderer, os quais são necessários para a simulação funcionar. Também foi utilizada para definir o objeto cannonDebugger durante a fase de testes do projeto, para a visualização das bounding boxes;
+- __test_utils.js__: Define métodos que foram úteis durante a fase de testes do simulador.
