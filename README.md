@@ -1,3 +1,3 @@
 # Wheelchair Simulator
 
-Computer graphics project with Three.js and Cannon.js.
+Projeto de computação gráfica com Three.js e Cannon.js.
